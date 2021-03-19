@@ -1,0 +1,17 @@
+{% extends 'courses/base.html' %}
+{% load course_custom_tags %}
+{% block title %}Registeration{% endblock %}
+{% block content %}
+
+<div class="container">
+    <h1 class="display-1">Registeration Form</h1>
+    <div>
+        <form action="/signup" method="post">
+            {% csrf_token %}
+            {{form.as_ul}}
+            <input type="submit" value="Registered"class="btn btn-success">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

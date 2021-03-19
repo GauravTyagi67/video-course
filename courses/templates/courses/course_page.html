@@ -1,0 +1,107 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+{% load course_custom_tags %}
+{% block title %}Code with Gaurav Tyagi{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'courses/css/scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'courses/css/style.css' %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'courses/js/course_page.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<style>
+    .no-preview{
+        cursor: not-allowed;
+    }
+    a{
+        color: blue;
+        text-decoration: none;
+    }
+    a:hover{
+        text-decoration: none;
+    }
+    .active-video-link{
+        color:white;
+    }
+    .active-video-link:hover{
+        text-decoration: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="mt-3">
+        <div class="card p-3">
+            <div class="row">
+                <div class="col-9">
+                    <!-- This is a video preview validation -->
+                    <div class="mx-auto">
+                        <iframe id="player" class="mx-auto"width="100%" height="315" 
+                        src="https://www.youtube.com/embed/{{video.video_id}}" 
+                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                         gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+    
+                <div class="col-3">
+                    <!-- This is a video list validation -->
+                    <ul id="video_list" class="list-group overflow-y-scroll">
+                        {% is_enrolled request course as enrolled %}
+                        {% for v in videos %}
+                            <li class="list-group-item {% if v == video %} active-video {% endif %}">
+                                <a class="{% if not enrolled and not v.is_preview %} text-muted no-preview {% endif %} {% if v == video %} active-video-link {% endif %}" href="?lecture={{v.serial_number}}">{{v}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- This is a course details -->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{course.name}}</h5>
+              <p class="card-text">{{course.description}}</p>
+            </div>
+          </div>
+    </div>
+    <!-- This is a Prerequisite validations -->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Prerequisite</h5>
+              <p class="card-text">
+                <ol>
+                    {% for pre in course.prerequisite_set.all %}
+                        <li class="">{{pre.description}}</li>
+                    {% endfor %}
+                </ol>
+              </p>
+            </div>
+          </div>
+    </div>
+    <!--  Prerequisite End validations -->
+    <!-- This is a Learnings validations -->
+    <div class="mt-3">
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Learnings</h5>
+              <p class="card-text">
+                <ol>
+                    {% for l in course.learning_set.all %}
+                        <li class="">{{l.description}}</li>
+                    {% endfor %}
+                </ol>
+              </p>
+            </div>
+          </div>
+    </div>
+    <!-- Learnings End validations -->
+    <br><br>   
+</div>
+
+{% endblock %}
